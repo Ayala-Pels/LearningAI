@@ -1,0 +1,42 @@
+@if (showControl()) {
+  <div [formGroup]="formGroup()" [class]="'field' + (control().required ? ' field-required' : '')">
+
+    @if (control().label) {
+      <label [for]="control().key" class="field-label">{{ control().label }}</label>
+    }
+
+    <input
+      #inputText
+      pInputText
+      type="text"
+      [id]="control().key"
+      [formControlName]="control().key"
+      [placeholder]="control().placeholder"
+      [maxlength]="maxLength()"
+      [minlength]="minLength()"
+      [attr.disabled]="control().disabled ? true : null"
+      (blur)="onBlur($event)"
+      (keyup)="onBlur($event)"
+    />
+
+    @if (control().helpText) {
+      <small class="field-helper">{{ control().helpText }}</small>
+    }
+
+    @if (inputControl?.invalid && (inputControl?.dirty || inputControl?.touched)) {
+      <div class="field-errors">
+        @if (inputControl?.errors?.['required']) {
+          <small>שדה חובה</small>
+        }
+        @if (inputControl?.errors?.['minlength']) {
+          <small>אורך מינימלי: {{ minLength() }} תווים</small>
+        }
+        @if (inputControl?.errors?.['maxlength']) {
+          <small>אורך מקסימלי: {{ maxLength() }} תווים</small>
+        }
+      </div>
+    }
+
+    <ng-content />
+  </div>
+}
